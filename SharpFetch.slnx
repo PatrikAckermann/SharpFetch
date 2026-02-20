@@ -1,0 +1,5 @@
+<Solution>
+  <Project Path="SharpFetch.Demo/SharpFetch.Demo.csproj" />
+  <Project Path="SharpFetch.Test/SharpFetch.Test.csproj" Id="92c549f7-82bf-4dea-bf01-70562100976c" />
+  <Project Path="SharpFetch/SharpFetch.csproj" />
+</Solution>
