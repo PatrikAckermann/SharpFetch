@@ -11,7 +11,7 @@ namespace SharpFetch
 
         private bool _httpClientOwned;
 
-        private static HttpClient _client;
+        private readonly HttpClient _client;
 
         public SharpFetchClient(
             string? baseUrl = null, 
@@ -78,13 +78,10 @@ namespace SharpFetch
             options ??= new Options { Method = HttpMethod.Get };
 
             var uri = UrlBuilder(url);
-            HttpContent? body;
+            HttpContent? body = null;
             if (options.Body != null)
             {
                 body = BodyBuilder(options.Body);
-            } else
-            {
-                body = new StringContent("");
             }
 
             // Send request
@@ -97,7 +94,7 @@ namespace SharpFetch
                     request.Headers.TryAddWithoutValidation(header.Key, header.Value);
                 }
             }
-            var response = _client.Send(request, cancellationToken);
+            var response = await _client.SendAsync(request, cancellationToken);
 
             // Process response
 
@@ -106,10 +103,19 @@ namespace SharpFetch
                 Status = (int)response.StatusCode,
                 StatusText = response.StatusCode.ToString(),
                 Body = await response.Content.ReadAsStreamAsync(),
-                HttpResponseMessage = response
+                HttpResponseMessage = response,
+                Headers = new Headers()
             };
 
-            return sfResponse;
+            foreach (var header in response.Headers)
+            {
+                foreach (var value in header.Value)
+                {
+                    sfResponse.Headers.Append(header.Key, value);
+                }
+            }
+    
+                return sfResponse;
         }
 
         private HttpContent? BodyBuilder(object body)
@@ -143,7 +149,7 @@ namespace SharpFetch
 
         private Uri UrlBuilder(string url)
         {
-            var fullUrl = _baseUrl != null ? new Uri(new Uri(_baseUrl), url) : new Uri(url);
+            var fullUrl = !string.IsNullOrWhiteSpace(url) ? new Uri(new Uri(_baseUrl), url) : new Uri(url);
             return fullUrl;
         }
     }

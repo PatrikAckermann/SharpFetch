@@ -12,13 +12,11 @@ namespace SharpFetch.Models
 
         public string StatusText { get; set; }
 
-        public Dictionary<string, string> Headers { get; set; }
+        public Headers Headers { get; set; }
 
         public Stream? Body { get; set; }
 
         public bool Ok { get { return Status >= 200 && Status < 300; } }
-
-        public bool Redirected { get { throw new NotImplementedException(); } }
 
         public string? Url { get; set; }
 
@@ -37,12 +35,13 @@ namespace SharpFetch.Models
             return parsed ?? throw new InvalidOperationException("Response body deserialized to null.");
         }
 
-        public string Text()
+        public async Task<string> Text()
         {
-            using (var reader = new StreamReader(Body))
-            {
-                return reader.ReadToEnd();
-            }
+            if (Body == null)
+                throw new InvalidOperationException("Response body is null.");
+
+            using var reader = new StreamReader(Body);
+            return await reader.ReadToEndAsync();
         }
 
         #endregion

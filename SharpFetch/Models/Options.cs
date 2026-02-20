@@ -8,7 +8,7 @@ namespace SharpFetch.Models
     {
         public HttpMethod Method { get; set; }
 
-        public Dictionary<string, string>? Headers { get; set; }
+        public Headers Headers { get; set; }
 
         public object? Body { get; set; }
     }
