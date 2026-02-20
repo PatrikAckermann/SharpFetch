@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections;
 
 namespace SharpFetch.Models
 {
@@ -12,8 +9,9 @@ namespace SharpFetch.Models
         // Ordinally ignore case for header keys, as per HTTP specifications.
         private Dictionary<string, List<string>> _headers = new Dictionary<string, List<string>>(StringComparer.OrdinalIgnoreCase);
 
-        public Headers(Dictionary<string, string>? headers = null) {
-            if (headers == null) return; 
+        public Headers(Dictionary<string, string>? headers = null)
+        {
+            if (headers == null) return;
             foreach (var kvp in headers)
             {
                 Set(kvp.Key, kvp.Value);
@@ -26,7 +24,7 @@ namespace SharpFetch.Models
             {
                 _headers[key] = new List<string>();
             }
-            
+
             _headers[key] = value.Split(", ").ToList();
         }
 

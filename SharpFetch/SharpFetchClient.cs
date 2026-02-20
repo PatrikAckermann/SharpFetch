@@ -1,7 +1,4 @@
 ﻿using SharpFetch.Models;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace SharpFetch
 {
@@ -14,11 +11,11 @@ namespace SharpFetch
         private readonly HttpClient _client;
 
         public SharpFetchClient(
-            string? baseUrl = null, 
-            Dictionary<string, string>? defaultHeaders = null, 
+            string? baseUrl = null,
+            Headers? defaultHeaders = null,
             HttpClient? client = null
-            ) 
-        { 
+            )
+        {
             _httpClientOwned = client == null;
 
             _client = client ?? new HttpClient(new SocketsHttpHandler
@@ -28,13 +25,7 @@ namespace SharpFetch
 
             _baseUrl = baseUrl ?? "";
 
-            if (defaultHeaders != null)
-            {
-                foreach (var header in defaultHeaders)
-                {
-                    _client.DefaultRequestHeaders.TryAddWithoutValidation(header.Key, header.Value);
-                }
-            }
+            SetDefaultHeaders(defaultHeaders);
         }
 
         public void Dispose()
@@ -50,8 +41,9 @@ namespace SharpFetch
             _baseUrl = baseUrl;
         }
 
-        public void SetDefaultHeaders(Dictionary<string, string> headers)
+        public void SetDefaultHeaders(Headers? headers)
         {
+            _client.DefaultRequestHeaders.Clear();
             if (headers != null)
             {
                 foreach (var header in headers)
@@ -61,12 +53,20 @@ namespace SharpFetch
             }
         }
 
-        public Dictionary<string, string> GetDefaultHeaders()
+        public void ClearDefaultHeaders()
         {
-            var headers = new Dictionary<string, string>();
+            _client.DefaultRequestHeaders.Clear();
+        }
+
+        public Headers GetDefaultHeaders()
+        {
+            var headers = new Headers();
             foreach (var header in _client.DefaultRequestHeaders)
             {
-                headers[header.Key] = string.Join(", ", header.Value);
+                foreach (var value in header.Value)
+                {
+                    headers.Append(header.Key, value);
+                }
             }
             return headers;
         }
@@ -75,7 +75,7 @@ namespace SharpFetch
         {
             // Prepare Data
 
-            options ??= new Options { Method = HttpMethod.Get };
+            options ??= new Options();
 
             var uri = UrlBuilder(url);
             HttpContent? body = null;
@@ -94,6 +94,7 @@ namespace SharpFetch
                     request.Headers.TryAddWithoutValidation(header.Key, header.Value);
                 }
             }
+            request.Content = body;
             var response = await _client.SendAsync(request, cancellationToken);
 
             // Process response
@@ -113,9 +114,13 @@ namespace SharpFetch
                 {
                     sfResponse.Headers.Append(header.Key, value);
                 }
+                foreach (var value in response.Content.Headers.GetValues(header.Key))
+                {
+                    sfResponse.Headers.Append(header.Key, value);
+                }
             }
-    
-                return sfResponse;
+
+            return sfResponse;
         }
 
         private HttpContent? BodyBuilder(object body)
@@ -149,7 +154,7 @@ namespace SharpFetch
 
         private Uri UrlBuilder(string url)
         {
-            var fullUrl = !string.IsNullOrWhiteSpace(url) ? new Uri(new Uri(_baseUrl), url) : new Uri(url);
+            var fullUrl = !string.IsNullOrWhiteSpace(_baseUrl) ? new Uri(new Uri(_baseUrl), url) : new Uri(url);
             return fullUrl;
         }
     }

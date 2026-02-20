@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Net;
-using System.Text;
-
-namespace SharpFetch.Models
+﻿namespace SharpFetch.Models
 {
     public class SharpFetchResponse
     {

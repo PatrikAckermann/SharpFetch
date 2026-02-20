@@ -4,8 +4,9 @@ using static SharpFetch.SharpFetch;
 
 // Normal C# Syntax
 
-var getResult = await Fetch("https://jsonplaceholder.typicode.com/todos/1", new SharpFetch.Models.Options {
-    Method = SharpFetch.Enums.MethodEnum.GET
+var getResult = await Fetch("https://jsonplaceholder.typicode.com/todos/1", new SharpFetch.Models.Options
+{
+    Method = HttpMethod.Get
 });
 
 Console.WriteLine("GET Result: ", getResult.StatusText);
@@ -22,7 +23,8 @@ var thenTestNoAwait = Fetch("https://jsonplaceholder.typicode.com/todos/1").Then
 
 // JS Fetch like THEN with error handling
 
-await Fetch("https://jsonplaceholder.typicode.com/todos/1").Then(x => {
+await Fetch("https://jsonplaceholder.typicode.com/todos/1").Then(x =>
+{
     if (x.Ok)
     {
         return x.Json<JsonPlaceHolderObj>();

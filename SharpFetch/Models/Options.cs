@@ -1,14 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace SharpFetch.Models
+﻿namespace SharpFetch.Models
 {
     public class Options
     {
-        public HttpMethod Method { get; set; }
+        public required HttpMethod Method { get; set; } = HttpMethod.Get;
 
-        public Headers Headers { get; set; }
+        public Headers? Headers { get; set; }
 
         public object? Body { get; set; }
     }

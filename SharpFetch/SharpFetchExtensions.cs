@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace SharpFetch
+﻿namespace SharpFetch
 {
     public static class SharpFetchExtensions
     {
