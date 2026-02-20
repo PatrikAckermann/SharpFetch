@@ -59,7 +59,7 @@ namespace SharpFetch.Models
             return _headers.ContainsKey(key);
         }
 
-        public IReadOnlyList<string> Keys => _headers.Keys.ToList().AsReadOnly();
+        public IReadOnlyCollection<string> Keys => _headers.Keys;
 
         /// <summary>Allows: headers["Authorization"] = "Bearer token"</summary>
         public string? this[string name]
