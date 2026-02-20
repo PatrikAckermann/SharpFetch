@@ -1,5 +1,4 @@
-﻿using SharpFetch.Enums;
-using SharpFetch.Models;
+﻿using SharpFetch.Models;
 
 namespace SharpFetch
 {

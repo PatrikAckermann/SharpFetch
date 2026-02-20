@@ -1,28 +1,48 @@
-﻿using SharpFetch.Enums;
-using SharpFetch.Models;
+﻿using SharpFetch.Models;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace SharpFetch
 {
-    public class SharpFetchClient
+    public class SharpFetchClient : IDisposable
     {
         private string? _baseUrl;
 
-        private Dictionary<string, string> _defaultHeaders;
+        private bool _httpClientOwned;
 
-        private HttpClient _client;
+        private static HttpClient _client;
 
         public SharpFetchClient(
-            string? BaseUrl = null, 
-            Dictionary<string, string>? DefaultHeaders = null, 
-            HttpClient? Client = null
+            string? baseUrl = null, 
+            Dictionary<string, string>? defaultHeaders = null, 
+            HttpClient? client = null
             ) 
         { 
-            _client = Client ?? new HttpClient();
-            _baseUrl = BaseUrl ?? "";
-            _defaultHeaders = DefaultHeaders ?? [];
+            _httpClientOwned = client == null;
+
+            _client = client ?? new HttpClient(new SocketsHttpHandler
+            {
+                PooledConnectionLifetime = TimeSpan.FromMinutes(2)
+            });
+
+            _baseUrl = baseUrl ?? "";
+
+            if (defaultHeaders != null)
+            {
+                foreach (var header in defaultHeaders)
+                {
+                    _client.DefaultRequestHeaders.TryAddWithoutValidation(header.Key, header.Value);
+                }
+            }
+        }
+
+        public void Dispose()
+        {
+            if (_httpClientOwned)
+            {
+                _client.Dispose();
+            }
         }
 
         public void SetBaseUrl(string baseUrl)
@@ -32,45 +52,54 @@ namespace SharpFetch
 
         public void SetDefaultHeaders(Dictionary<string, string> headers)
         {
-            _defaultHeaders = headers;
+            if (headers != null)
+            {
+                foreach (var header in headers)
+                {
+                    _client.DefaultRequestHeaders.TryAddWithoutValidation(header.Key, header.Value);
+                }
+            }
         }
 
-        public void SetHttpClient(HttpClient client)
+        public Dictionary<string, string> GetDefaultHeaders()
         {
-            _client = client;
+            var headers = new Dictionary<string, string>();
+            foreach (var header in _client.DefaultRequestHeaders)
+            {
+                headers[header.Key] = string.Join(", ", header.Value);
+            }
+            return headers;
         }
 
-        public async Task<SharpFetchResponse> Fetch(string url, Options? options = null)
+        public async Task<SharpFetchResponse> Fetch(string url, Options? options = null, CancellationToken cancellationToken = default)
         {
-            options ??= new Options { Method = MethodEnum.GET };
+            // Prepare Data
 
-            var uri = UriBuilder(url);
+            options ??= new Options { Method = HttpMethod.Get };
+
+            var uri = UrlBuilder(url);
             HttpContent? body;
             if (options.Body != null)
             {
                 body = BodyBuilder(options.Body);
-            }
-            body = new StringContent("");
-
-            HttpResponseMessage response;
-
-            switch (options.Method)
+            } else
             {
-                case MethodEnum.GET:
-                    response = await _client.GetAsync(uri);
-                    break;
-                case MethodEnum.POST:
-                    response = await _client.PostAsync(uri, body);  
-                    break;
-                case MethodEnum.PUT:
-                    response = await _client.PutAsync(uri, body);
-                    break;
-                case MethodEnum.PATCH:
-                    response = await _client.PatchAsync(uri, body);
-                    break;
-                default:
-                    throw new NotImplementedException("Only GET method is implemented.");
+                body = new StringContent("");
             }
+
+            // Send request
+
+            HttpRequestMessage request = new HttpRequestMessage(options.Method, uri);
+            if (options.Headers != null)
+            {
+                foreach (var header in options.Headers)
+                {
+                    request.Headers.TryAddWithoutValidation(header.Key, header.Value);
+                }
+            }
+            var response = _client.Send(request, cancellationToken);
+
+            // Process response
 
             SharpFetchResponse sfResponse = new SharpFetchResponse
             {
@@ -105,13 +134,14 @@ namespace SharpFetch
             }
             else
             {
+                // Should be unreachable due to type checks, but just in case
                 throw new NotSupportedException("Unsupported body type. Only string, byte[], objects, and streams are supported.");
             }
 
             return result;
         }
 
-        private Uri UriBuilder(string url)
+        private Uri UrlBuilder(string url)
         {
             var fullUrl = _baseUrl != null ? new Uri(new Uri(_baseUrl), url) : new Uri(url);
             return fullUrl;

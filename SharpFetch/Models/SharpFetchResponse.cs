@@ -20,8 +20,6 @@ namespace SharpFetch.Models
 
         public bool Redirected { get { throw new NotImplementedException(); } }
 
-        public bool Type { get; set; }
-
         public string? Url { get; set; }
 
         /// <summary>
@@ -31,17 +29,12 @@ namespace SharpFetch.Models
 
         #region Methods
 
-        public T Json<T>()
+        public async Task<T> Json<T>()
         {
             if (Body == null)
                 throw new InvalidOperationException("Response body is null.");
-            using (var reader = new StreamReader(Body))
-            {
-                var json = reader.ReadToEnd();
-                var parsed = System.Text.Json.JsonSerializer.Deserialize<T>(json);
-
-                return parsed;
-            }
+            var parsed = await System.Text.Json.JsonSerializer.DeserializeAsync<T>(Body);
+            return parsed ?? throw new InvalidOperationException("Response body deserialized to null.");
         }
 
         public string Text()
