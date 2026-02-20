@@ -43,9 +43,7 @@ var data = await Fetch("https://api.example.com/user")
 
 ### 1. Installation
 
-Bash
-
-```
+```bash
 dotnet add package SharpFetch
 
 ```
@@ -53,9 +51,7 @@ Optionally also add SharpFetch.Global for an automatic global static using.
 
 ### 2. Basic Usage (Fluent)
 
-C#
-
-```
+```csharp
 // Simple string-based fetch
 var user = await Fetch("https://api.example.com/profile")
                .Then(res => res.Json<UserProfile>());
@@ -66,9 +62,7 @@ var user = await Fetch("https://api.example.com/profile")
 
 For enterprise apps, use the instantiated version for better control over the lifecycle:
 
-C#
-
-```
+```csharp
 var api = new SharpFetch();
 
 var response = await api.Fetch("https://api.example.com/data", new Options {
