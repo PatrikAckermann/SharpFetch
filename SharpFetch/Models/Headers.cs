@@ -7,7 +7,7 @@ namespace SharpFetch.Models
         public static implicit operator Headers(Dictionary<string, string> dict) => new Headers(dict);
 
         // Ordinally ignore case for header keys, as per HTTP specifications.
-        private Dictionary<string, List<string>> _headers = new Dictionary<string, List<string>>(StringComparer.OrdinalIgnoreCase);
+        private readonly Dictionary<string, List<string>> _headers = new Dictionary<string, List<string>>(StringComparer.OrdinalIgnoreCase);
 
         public Headers(Dictionary<string, string>? headers = null)
         {
@@ -25,11 +25,10 @@ namespace SharpFetch.Models
 
         public void Append(string key, string value)
         {
-            if (!_headers.ContainsKey(key))
-            {
-                _headers[key] = new List<string>();
-            }
-            _headers[key].Add(value);
+            if (!_headers.TryGetValue(key, out var list))
+                _headers[key] = list = [];
+
+            list.Add(value);
         }
 
         public void Delete(string key)
@@ -60,7 +59,7 @@ namespace SharpFetch.Models
             return _headers.ContainsKey(key);
         }
 
-        public List<string> Keys() => new List<string>(_headers.Keys);
+        public IReadOnlyList<string> Keys => _headers.Keys.ToList().AsReadOnly();
 
         /// <summary>Allows: headers["Authorization"] = "Bearer token"</summary>
         public string? this[string name]

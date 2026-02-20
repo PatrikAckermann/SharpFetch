@@ -9,7 +9,7 @@
 
         public Headers Headers { get; set; } = new Headers();
 
-        public Stream? Body { get; set; } = null;
+        public Stream? Body { get; set; }
 
         public bool Ok { get { return Status >= 200 && Status < 300; } }
 
@@ -18,7 +18,7 @@
         /// <summary>
         /// The original response returned by the HttpClient.
         /// </summary>
-        public HttpResponseMessage? HttpResponseMessage { get; set; }
+        public HttpResponseMessage HttpResponseMessage { get; set; } = null!;
 
         #region Methods
 

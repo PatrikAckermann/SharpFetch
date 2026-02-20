@@ -104,8 +104,7 @@ namespace SharpFetch
                 Status = (int)response.StatusCode,
                 StatusText = response.StatusCode.ToString(),
                 Body = await response.Content.ReadAsStreamAsync(),
-                HttpResponseMessage = response,
-                Headers = new Headers()
+                HttpResponseMessage = response
             };
 
             foreach (var header in response.Headers)
