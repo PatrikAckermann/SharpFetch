@@ -114,7 +114,10 @@ namespace SharpFetch
                 {
                     sfResponse.Headers.Append(header.Key, value);
                 }
-                foreach (var value in response.Content.Headers.GetValues(header.Key))
+            }
+            foreach (var header in response.Content.Headers)
+            {
+                foreach (var value in header.Value)
                 {
                     sfResponse.Headers.Append(header.Key, value);
                 }

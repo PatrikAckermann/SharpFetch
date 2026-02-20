@@ -5,11 +5,11 @@
 
         public int Status { get; set; }
 
-        public string StatusText { get; set; }
+        public string StatusText { get; set; } = string.Empty;
 
-        public Headers Headers { get; set; }
+        public Headers Headers { get; set; } = new Headers();
 
-        public Stream? Body { get; set; }
+        public Stream? Body { get; set; } = null;
 
         public bool Ok { get { return Status >= 200 && Status < 300; } }
 
@@ -18,7 +18,7 @@
         /// <summary>
         /// The original response returned by the HttpClient.
         /// </summary>
-        public HttpResponseMessage HttpResponseMessage { get; set; }
+        public HttpResponseMessage? HttpResponseMessage { get; set; }
 
         #region Methods
 

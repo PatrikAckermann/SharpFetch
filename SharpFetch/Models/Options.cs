@@ -2,7 +2,7 @@
 {
     public class Options
     {
-        public required HttpMethod Method { get; set; } = HttpMethod.Get;
+        public HttpMethod Method { get; set; } = HttpMethod.Get;
 
         public Headers? Headers { get; set; }
 

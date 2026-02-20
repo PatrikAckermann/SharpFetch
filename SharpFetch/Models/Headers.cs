@@ -20,12 +20,7 @@ namespace SharpFetch.Models
 
         public void Set(string key, string value)
         {
-            if (!_headers.ContainsKey(key))
-            {
-                _headers[key] = new List<string>();
-            }
-
-            _headers[key] = value.Split(", ").ToList();
+            _headers[key] = [value];
         }
 
         public void Append(string key, string value)
@@ -51,13 +46,13 @@ namespace SharpFetch.Models
             return null;
         }
 
-        public List<string> GetAll(string key)
+        public IReadOnlyList<string> GetAll(string key)
         {
             if (_headers.TryGetValue(key, out var values))
             {
-                return values;
+                return values.AsReadOnly();
             }
-            return new List<string>();
+            return [];
         }
 
         public bool Has(string key)
