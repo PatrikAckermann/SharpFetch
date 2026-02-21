@@ -91,7 +91,7 @@ Built with ❤️ for the .NET community.
 ## 🤖  AI Disclaimer
 
 SharpFetch was supported in development by AI.
-Key involments include:
+Key involvements include:
 - Code Reviews
 - Architectural Improvement Recommendations
 - Assisting in simple programming tasks
