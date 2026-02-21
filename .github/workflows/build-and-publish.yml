@@ -52,7 +52,12 @@ jobs:
         comment-tag: coverage_report
 
     - name: Pack
-      run: dotnet pack --configuration Release --no-build --output .nupkg
+      run: |
+        if [[ "${{ github.ref }}" == "refs/heads/develop" ]]; then
+          dotnet pack --configuration Release --no-build --output .nupkg -p:MinVerAutoIncrement=patch -p:MinVerPreRelease=beta
+        else
+          dotnet pack --configuration Release --no-build --output .nupkg
+        fi
 
     - name: Push to NuGet
       if: (github.ref == 'refs/heads/main' || github.event_name == 'release') && github.event_name != 'pull_request'
