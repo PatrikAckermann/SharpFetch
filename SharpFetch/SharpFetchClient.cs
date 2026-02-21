@@ -104,7 +104,8 @@ namespace SharpFetch
                 Status = (int)response.StatusCode,
                 StatusText = response.StatusCode.ToString(),
                 Body = await response.Content.ReadAsStreamAsync(),
-                HttpResponseMessage = response
+                HttpResponseMessage = response,
+                Url = response.RequestMessage?.RequestUri?.ToString(),
             };
 
             foreach (var header in response.Headers)
@@ -156,8 +157,12 @@ namespace SharpFetch
 
         private Uri UrlBuilder(string url)
         {
-            var fullUrl = !string.IsNullOrWhiteSpace(_baseUrl) ? new Uri(new Uri(_baseUrl), url) : new Uri(url);
-            return fullUrl;
+            if (!string.IsNullOrWhiteSpace(_baseUrl))
+            {
+                var baseUri = _baseUrl.EndsWith('/') ? _baseUrl : _baseUrl + "/";
+                return new Uri(new Uri(baseUri), url);
+            }
+            return new Uri(url);
         }
     }
 }

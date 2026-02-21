@@ -15,7 +15,14 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\SharpFetch\SharpFetch.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Using Include="Xunit" />
+    <Using Include="SharpFetch" />
+    <Using Include="SharpFetch.Models" />
+    <Using Include="System.Net" />
   </ItemGroup>
 
 </Project>
