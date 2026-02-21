@@ -87,3 +87,15 @@ var result = await response.Json<ExampleClass>();
 Contributions are welcome! Whether it's a bug report or a feature request, feel free to open an issue.
 
 Built with ❤️ for the .NET community.
+
+## 🤖  AI Disclaimer
+
+SharpFetch was supported in development by AI.
+Key involments include:
+- Code Reviews
+- Architectural Improvement Recommendations
+- Assisting in simple programming tasks
+- Test-writing
+- Documentation
+
+Any contributions by AI are humanly reviewed. We urge all contributors to properly review their AI-generated code before submitting it.
