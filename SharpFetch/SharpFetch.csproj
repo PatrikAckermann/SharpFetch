@@ -1,0 +1,33 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+	<TargetFrameworks>net8.0;net9.0;net10.0</TargetFrameworks>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+
+	<MinVerMinimumMajor>1</MinVerMinimumMajor>
+	<MinVerTagPrefix>v</MinVerTagPrefix>
+
+	<PackageId>SharpFetch</PackageId>
+	<Authors>Patrik Ackermann</Authors>
+	<Description>The ease of Fetch API with the benefits of C#</Description>
+	<PackageLicenseExpression>MIT</PackageLicenseExpression>
+	<RepositoryUrl>https://github.com/patrikackermann/SharpFetch</RepositoryUrl>
+	<PackageTags>http;fetch;client;request;api;rest;javascript;js-style;fetch-api;dotnet;csharp;json</PackageTags>
+
+	<GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Folder Include="Enums\" />
+    <Folder Include="NewFolder\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="MinVer" Version="7.0.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+
+</Project>
