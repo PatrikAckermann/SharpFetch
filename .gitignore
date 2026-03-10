@@ -18,6 +18,9 @@
 # MSBuild Binary and Structured Log
 *.binlog
 
+# Generated files
+README.generated.md
+
 # MSBuild response files
 !MSBuild.rsp
 !Directory.Build.rsp

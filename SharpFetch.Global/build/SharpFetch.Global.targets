@@ -1,0 +1,5 @@
+﻿<Project>
+  <ItemGroup>
+    <Using Include="SharpFetch.SharpFetchStatic" Static="True" />
+  </ItemGroup>
+</Project>

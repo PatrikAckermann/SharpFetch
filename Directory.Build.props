@@ -1,0 +1,19 @@
+<Project>
+
+  <PropertyGroup>
+    <Authors>Patrik Ackermann</Authors>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <RepositoryUrl>https://github.com/patrikackermann/SharpFetch</RepositoryUrl>
+    <PackageTags>http;fetch;client;request;api;rest;javascript;js-style;fetch-api;dotnet;csharp;json</PackageTags>
+    <MinVerMinimumMajor>1</MinVerMinimumMajor>
+    <MinVerTagPrefix>v</MinVerTagPrefix>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="MinVer" Version="7.0.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+
+</Project>

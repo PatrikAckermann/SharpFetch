@@ -9,5 +9,7 @@
   </PropertyGroup>
 	<ItemGroup>
 		<ProjectReference Include="../SharpFetch/SharpFetch.csproj"></ProjectReference>
+		<ProjectReference Include="../SharpFetch.Global/SharpFetch.Global.csproj" AssetTargetFallback="true"></ProjectReference>
 	</ItemGroup>
+	<Import Project="../SharpFetch.Global/build/SharpFetch.Global.targets" />
 </Project>

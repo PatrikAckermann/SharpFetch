@@ -2,7 +2,7 @@
 
 namespace SharpFetch
 {
-    public static class SharpFetch
+    public static class SharpFetchStatic
     {
         private static readonly SharpFetchClient _defaultClient = new SharpFetchClient();
 

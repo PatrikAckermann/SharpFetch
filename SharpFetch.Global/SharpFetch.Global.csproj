@@ -1,0 +1,47 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+	<TargetFrameworks>net8.0;net9.0;net10.0</TargetFrameworks>
+	<ImplicitUsings>enable</ImplicitUsings>
+	<Nullable>enable</Nullable>
+	<IncludeBuildOutput>false</IncludeBuildOutput>
+
+	<PackageId>SharpFetch.Global</PackageId>
+	<Description>Adds global access to the Fetch method of SharpFetch</Description>
+	<PackageReadmeFile>README.generated.md</PackageReadmeFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+	<ProjectReference Include="../SharpFetch/SharpFetch.csproj" />
+	<None Include="build\SharpFetch.Global.targets" Pack="true" PackagePath="build\" />
+  </ItemGroup>
+
+  <UsingTask TaskName="ConcatenateTextFiles"
+			 TaskFactory="RoslynCodeTaskFactory"
+			 AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.Core.dll">
+	<ParameterGroup>
+	  <InputFiles ParameterType="Microsoft.Build.Framework.ITaskItem[]" Required="true" />
+	  <OutputFile ParameterType="System.String" Required="true" />
+	  <Separator ParameterType="System.String" />
+	</ParameterGroup>
+	<Task>
+	  <Using Namespace="System.IO" />
+	  <Code Type="Fragment" Language="cs">
+		<![CDATA[
+		  var parts = new System.Collections.Generic.List<string>();
+		  foreach (var file in InputFiles)
+			parts.Add(File.ReadAllText(file.GetMetadata("FullPath")).TrimEnd());
+		  var sep = string.IsNullOrEmpty(Separator) ? "\n\n---\n\n" : Separator;
+		  File.WriteAllText(OutputFile, string.Join(sep, parts) + "\n");
+		]]>
+	  </Code>
+	</Task>
+  </UsingTask>
+
+  <Target Name="GenerateCombinedReadme" BeforeTargets="GenerateNuspec">
+	<ConcatenateTextFiles
+	  InputFiles="$(MSBuildProjectDirectory)\README.header.md;$(MSBuildProjectDirectory)\..\README.md"
+	  OutputFile="$(MSBuildProjectDirectory)\README.generated.md" />
+  </Target>
+
+</Project>

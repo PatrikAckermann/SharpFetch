@@ -1,6 +1,5 @@
 ﻿using SharpFetch;
 using SharpFetch.Demo.Models;
-using static SharpFetch.SharpFetch;
 
 // Normal C# Syntax
 
