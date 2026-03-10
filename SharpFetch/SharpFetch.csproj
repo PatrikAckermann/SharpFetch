@@ -1,0 +1,20 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+	<TargetFrameworks>net8.0;net9.0;net10.0</TargetFrameworks>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+
+	<PackageId>SharpFetch</PackageId>
+	<Description>The ease of Fetch API with the benefits of C#</Description>
+	<PackageReadmeFile>README.md</PackageReadmeFile>
+
+	<GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+  </PropertyGroup>
+
+  <ItemGroup>
+	<Folder Include="Enums\" />
+	<None Include="..\README.md" Pack="true" PackagePath="" />
+  </ItemGroup>
+
+  </Project>
