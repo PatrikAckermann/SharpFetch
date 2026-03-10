@@ -7,7 +7,7 @@
 
 	<PackageId>SharpFetch</PackageId>
 	<Description>The ease of Fetch API with the benefits of C#</Description>
-	<PackageReadmeFile>..\README.md</PackageReadmeFile>
+	<PackageReadmeFile>README.md</PackageReadmeFile>
 
 	<GeneratePackageOnBuild>false</GeneratePackageOnBuild>
   </PropertyGroup>

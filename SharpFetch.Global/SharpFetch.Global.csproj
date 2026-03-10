@@ -14,6 +14,7 @@
   <ItemGroup>
 	<ProjectReference Include="../SharpFetch/SharpFetch.csproj" />
 	<None Include="build\SharpFetch.Global.targets" Pack="true" PackagePath="build\" />
+	<None Include="README.generated.md" Pack="true" PackagePath="" />
   </ItemGroup>
 
   <UsingTask TaskName="ConcatenateTextFiles"
@@ -42,9 +43,6 @@
 	<ConcatenateTextFiles
 	  InputFiles="$(MSBuildProjectDirectory)\README.header.md;$(MSBuildProjectDirectory)\..\README.md"
 	  OutputFile="$(MSBuildProjectDirectory)\README.generated.md" />
-	<ItemGroup>
-	  <None Include="$(MSBuildProjectDirectory)\README.generated.md" Pack="true" PackagePath="" />
-	</ItemGroup>
   </Target>
 
 </Project>
